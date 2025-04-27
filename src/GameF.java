@@ -2,6 +2,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -42,6 +43,12 @@ public class GameF extends javax.swing.JFrame {
             manager.createMapFirstLevel();
         }
         initComponents();
+        lblusername.setText(player.getUsername());
+        lbllevel.setText(String.valueOf(player.getLevel()));
+        lblscore.setText(String.valueOf(player.getScore()));
+
+            
+        
         setLayout(new BorderLayout());
         panelMap.setLayout(new GridLayout(4, 8, 12, 12));
         
@@ -65,11 +72,10 @@ public class GameF extends javax.swing.JFrame {
                 btnsMap[i].setIcon(iconFinishFlag);
             }else if (temp.getSpotType()=="Treasure") {
                 btnsMap[i].setIcon(iconTreasure);
-                btnsMap[i].setBackground(new Color(139,69,19)); // Goldenrod koyu sarı
+                btnsMap[i].setBackground(new Color(225,229,9)); // Goldenrod koyu sarı
             }else if (temp.getSpotType()=="Trap") {
                 btnsMap[i].setIcon(iconTrap);
-                btnsMap[i].setBackground(new Color(105, 105, 105
-));
+                btnsMap[i].setBackground(new Color(43, 36, 41));
             }else
                 btnsMap[i].setBackground(new Color(240, 248, 255));
 
@@ -88,8 +94,21 @@ public class GameF extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         panelMap = new javax.swing.JPanel();
         panelInfos = new javax.swing.JPanel();
+        btnroll = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        lblusername = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        lblscore = new javax.swing.JLabel();
+        lbllevel = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        lblcurrentposition = new javax.swing.JLabel();
+        lblzar = new javax.swing.JLabel();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,15 +123,83 @@ public class GameF extends javax.swing.JFrame {
             .addGap(0, 524, Short.MAX_VALUE)
         );
 
+        btnroll.setText("Zar");
+        btnroll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnrollActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Username : ");
+
+        lblusername.setText("jLabel2");
+
+        jLabel3.setText("Score : ");
+
+        jLabel4.setText("Level :");
+
+        lblscore.setText("jLabel2");
+
+        lbllevel.setText("jLabel2");
+
+        jLabel7.setText("Current Position : ");
+
         javax.swing.GroupLayout panelInfosLayout = new javax.swing.GroupLayout(panelInfos);
         panelInfos.setLayout(panelInfosLayout);
         panelInfosLayout.setHorizontalGroup(
             panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(panelInfosLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(panelInfosLayout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnroll, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelInfosLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblcurrentposition, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfosLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(lblzar, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 502, Short.MAX_VALUE)
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblusername, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbllevel, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblscore, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20))
         );
         panelInfosLayout.setVerticalGroup(
             panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
+            .addGroup(panelInfosLayout.createSequentialGroup()
+                .addGap(117, 117, 117)
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(lblusername))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(lblscore))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbllevel)
+                    .addComponent(jLabel4))
+                .addGap(0, 61, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfosLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnroll, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblzar))
+                .addGap(18, 18, 18)
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(lblcurrentposition))
+                .addGap(18, 18, 18))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -120,7 +207,10 @@ public class GameF extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(panelInfos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelInfos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,6 +222,24 @@ public class GameF extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrollActionPerformed
+    Random random = new Random();
+    int diceRoll = random.nextInt(6) + 1; 
+
+    int newPosition = player.getPosition() + diceRoll;
+    player.setPosition(newPosition);  
+    
+    lblzar.setText(String.valueOf(diceRoll));
+    lblcurrentposition.setText(String.valueOf(player.getPosition()));
+    
+
+
+    
+    if (player.getPosition() >= 31) {
+        JOptionPane.showMessageDialog(this, "Tebrikler bitiş noktasına ulaştınız.");
+    }
+    }//GEN-LAST:event_btnrollActionPerformed
 
     /**
      * @param args the command line arguments
@@ -174,6 +282,17 @@ public class GameF extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnroll;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel lblcurrentposition;
+    private javax.swing.JLabel lbllevel;
+    private javax.swing.JLabel lblscore;
+    private javax.swing.JLabel lblusername;
+    private javax.swing.JLabel lblzar;
     private javax.swing.JPanel panelInfos;
     private javax.swing.JPanel panelMap;
     // End of variables declaration//GEN-END:variables
