@@ -197,7 +197,7 @@ public class MenuF extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MenuF().setVisible(true);
-                //deneme123.
+                //deneme123.asd
             }
         });
     }
