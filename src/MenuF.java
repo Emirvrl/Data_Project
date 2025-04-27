@@ -198,6 +198,7 @@ public class MenuF extends javax.swing.JFrame {
             public void run() {
                 new MenuF().setVisible(true); //eklendi emreeklendi
                 //sdasdsa
+                //deneme1
             }
         });
     }
