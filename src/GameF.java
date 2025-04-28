@@ -6,12 +6,12 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author emreyazici
@@ -24,56 +24,62 @@ public class GameF extends javax.swing.JFrame {
     //player ve manager oluştur aşağıda constructer içinde bunları this ile eşitle
     private Player player;
     private Manager manager;
+    //private JPanel panelMap;
     private JButton[] btnsMap = new JButton[32];
     private ImageIcon iconTreasure;
     private ImageIcon iconTrap;
     private ImageIcon iconCharacter;
     private ImageIcon iconFinishFlag;
-    public GameF(Player player,Manager manager) {
-        this.player=player;
-        this.manager=manager;
+    private ImageIcon iconStartFlag;
+    public GameF(Player player, Manager manager) {
+        this.player = player;
+        this.manager = manager;
+        initComponents();
+        
+        if (panelMap == null) {
+            System.out.println("null");
+        
+    }
+        
+        panelMap.setLayout(new GridLayout(4, 8, 12, 12));
+        
         this.iconTreasure = new ImageIcon(getClass().getResource("/images/treasureBtn.png"));
         this.iconTrap = new ImageIcon(getClass().getResource("/images/dang1.png"));
         this.iconCharacter = new ImageIcon(getClass().getResource("/images/miner.png"));
         this.iconFinishFlag = new ImageIcon(getClass().getResource("/images/finish.png"));
-        
-        if (player.getLevel()==1) {
-            manager.createMapFirstLevel();
-        }else{
-            manager.createMapFirstLevel();
-        }
-        initComponents();
-        lblusername.setText(player.getUsername());
-        lbllevel.setText(String.valueOf(player.getLevel()));
-        lblscore.setText(String.valueOf(player.getScore()));
-
-            
-        
-        setLayout(new BorderLayout());
-        panelMap.setLayout(new GridLayout(4, 8, 12, 12));
+        this.iconStartFlag = new ImageIcon(getClass().getResource("/images/start.png"));
         
         for (int i = 0; i < 32; i++) {
-            btnsMap[i]=new JButton(String.valueOf(i));
+            btnsMap[i] = new JButton(String.valueOf(i));
             btnsMap[i].setHorizontalTextPosition(JButton.CENTER);
             btnsMap[i].setVerticalTextPosition(JButton.BOTTOM);
             btnsMap[i].setHorizontalAlignment(JButton.CENTER);
             panelMap.add(btnsMap[i]);
         }
+        if (player.getLevel() == 1) {
+            manager.createMapFirstLevel();
+        } else {
+            manager.createMapFirstLevel();
+        }
         setButonIcons();
+   
+        lblUsernamePlayer.setText(player.getUsername());
+        lblLevelPlayer.setText(String.valueOf(player.getLevel()));
+        lblScorePlayer.setText(String.valueOf(player.getScore()));
     }
-    
-    private void setButonIcons(){
-        int i=0;
+
+    private void setButonIcons() {//For the begining
+        int i = 0;
         SNode temp = manager.getsListFirstLevel().getHeader();
         while (temp!=null && i<32) {            
-            if (temp.getSpotType()=="Start") {
+            if (temp.getSpotType().equals("Start")) {
                 btnsMap[i].setIcon(iconCharacter);
-            }else if (temp.getSpotType()=="Finish") {
+            } else if (temp.getSpotType().equals("Finish")) {
                 btnsMap[i].setIcon(iconFinishFlag);
-            }else if (temp.getSpotType()=="Treasure") {
+            } else if (temp.getSpotType().equals("Treasure")) {
                 btnsMap[i].setIcon(iconTreasure);
-                btnsMap[i].setBackground(new Color(225,229,9)); // Goldenrod koyu sarı
-            }else if (temp.getSpotType()=="Trap") {
+                btnsMap[i].setBackground(new Color(225,229,9)); 
+            }else if (temp.getSpotType().equals("Trap")) {
                 btnsMap[i].setIcon(iconTrap);
                 btnsMap[i].setBackground(new Color(43, 36, 41));
             }else
@@ -84,7 +90,39 @@ public class GameF extends javax.swing.JFrame {
         }
         btnsMap[31].setIcon(iconFinishFlag);
     }
-
+    private void setPrevButtonIcon(){
+        String prevPosition = getSpotType(player.getPrevPosition());
+        if (prevPosition.equals("Start")) {
+            btnsMap[player.getPrevPosition()].setIcon(iconStartFlag);
+        }else if (prevPosition.equals("Treasure")) {
+            btnsMap[player.getPrevPosition()].setIcon(iconTreasure);
+        }else if (prevPosition.equals("Trap")) {
+            btnsMap[player.getPrevPosition()].setIcon(iconTrap);
+        }else if (prevPosition.equals("Empty")) {
+            btnsMap[player.getPrevPosition()].setIcon(null);
+        }
+    }
+  
+    private String getSpotType(int position){
+        SNode temp = manager.getsListFirstLevel().getHeader();
+        while (position>0) {              
+            temp=temp.getNext();
+            position--;
+        }
+        return temp.getSpotType();
+    }
+    
+    private void move(){
+        String positionType=getSpotType(player.getPosition());
+        btnsMap[player.getPosition()].setIcon(iconCharacter);
+        if (positionType.equals("Trap")) {
+            player.setScore(player.getScore()-5);
+        }else if (positionType.equals("Treasure")) {
+            player.setScore(player.getScore()+10);
+        }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -97,81 +135,74 @@ public class GameF extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         panelMap = new javax.swing.JPanel();
         panelInfos = new javax.swing.JPanel();
-        btnroll = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        lblusername = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        lblscore = new javax.swing.JLabel();
-        lbllevel = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        lblcurrentposition = new javax.swing.JLabel();
-        lblzar = new javax.swing.JLabel();
+        btnRoll = new javax.swing.JButton();
+        lblUsername = new javax.swing.JLabel();
+        lblUsernamePlayer = new javax.swing.JLabel();
+        lblScore = new javax.swing.JLabel();
+        lblLevel = new javax.swing.JLabel();
+        lblScorePlayer = new javax.swing.JLabel();
+        lblLevelPlayer = new javax.swing.JLabel();
+        lblPosition = new javax.swing.JLabel();
+        lblPositionPlayer = new javax.swing.JLabel();
+        lblDice = new javax.swing.JLabel();
 
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(panelMap);
-        panelMap.setLayout(panelMapLayout);
-        panelMapLayout.setHorizontalGroup(
-            panelMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 902, Short.MAX_VALUE)
-        );
-        panelMapLayout.setVerticalGroup(
-            panelMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 524, Short.MAX_VALUE)
-        );
+        panelMap.setLayout(new java.awt.GridLayout(4, 8));
 
-        btnroll.setText("Zar");
-        btnroll.addActionListener(new java.awt.event.ActionListener() {
+        btnRoll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/dice_17595868.png"))); // NOI18N
+        btnRoll.setText("Roll");
+        btnRoll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnrollActionPerformed(evt);
+                btnRollActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Username : ");
+        lblUsername.setText("Username : ");
 
-        lblusername.setText("jLabel2");
+        lblUsernamePlayer.setText("null");
 
-        jLabel3.setText("Score : ");
+        lblScore.setText("Score : ");
 
-        jLabel4.setText("Level :");
+        lblLevel.setText("Level :");
 
-        lblscore.setText("jLabel2");
+        lblScorePlayer.setText("0");
 
-        lbllevel.setText("jLabel2");
+        lblLevelPlayer.setText("1");
 
-        jLabel7.setText("Current Position : ");
+        lblPosition.setText("Current Position : ");
+
+        lblPositionPlayer.setText("0");
 
         javax.swing.GroupLayout panelInfosLayout = new javax.swing.GroupLayout(panelInfos);
         panelInfos.setLayout(panelInfosLayout);
         panelInfosLayout.setHorizontalGroup(
             panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInfosLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInfosLayout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btnroll, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(23, 23, 23)
+                        .addComponent(lblPosition))
+                    .addComponent(btnRoll, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInfosLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblcurrentposition, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblPositionPlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfosLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(lblzar, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 502, Short.MAX_VALUE)
+                        .addGap(8, 8, 8)
+                        .addComponent(lblDice, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 497, Short.MAX_VALUE)
                 .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblScore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 69, Short.MAX_VALUE)
+                    .addComponent(lblLevel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
                 .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblusername, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbllevel, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblscore, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblUsernamePlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblLevelPlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblScorePlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
         );
         panelInfosLayout.setVerticalGroup(
@@ -179,26 +210,29 @@ public class GameF extends javax.swing.JFrame {
             .addGroup(panelInfosLayout.createSequentialGroup()
                 .addGap(117, 117, 117)
                 .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(lblusername))
+                    .addComponent(lblUsername)
+                    .addComponent(lblUsernamePlayer))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(lblscore))
+                    .addComponent(lblScore)
+                    .addComponent(lblScorePlayer))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbllevel)
-                    .addComponent(jLabel4))
-                .addGap(0, 61, Short.MAX_VALUE))
+                    .addComponent(lblLevelPlayer)
+                    .addComponent(lblLevel))
+                .addGap(0, 24, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfosLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelInfosLayout.createSequentialGroup()
+                        .addComponent(btnRoll, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(panelInfosLayout.createSequentialGroup()
+                        .addComponent(lblDice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(55, 55, 55)))
                 .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnroll, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblzar))
-                .addGap(18, 18, 18)
-                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(lblcurrentposition))
+                    .addComponent(lblPosition)
+                    .addComponent(lblPositionPlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
 
@@ -215,31 +249,39 @@ public class GameF extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panelInfos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(panelMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 567, Short.MAX_VALUE)
+                .addComponent(panelInfos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrollActionPerformed
-    Random random = new Random();
-    int diceRoll = random.nextInt(6) + 1; 
+    private void btnRollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRollActionPerformed
+        //player.setPrevSpot(getSpotType(player.getPosition())); //what is the prev spot
+        player.setPrevPosition(player.getPosition());
+        Random random = new Random();
+        int diceRoll = random.nextInt(6) + 1;
 
-    int newPosition = player.getPosition() + diceRoll;
-    player.setPosition(newPosition);  
-    
-    lblzar.setText(String.valueOf(diceRoll));
-    lblcurrentposition.setText(String.valueOf(player.getPosition()));
-    
-
-
-    
-    if (player.getPosition() >= 31) {
-        JOptionPane.showMessageDialog(this, "Tebrikler bitiş noktasına ulaştınız.");
-    }
-    }//GEN-LAST:event_btnrollActionPerformed
+        int newPosition = player.getPosition() + diceRoll;
+        if (newPosition>31) {
+            newPosition=31;
+        }
+//        setPrevButtonIcon();
+        player.setPosition(newPosition);
+        
+        lblDice.setText(String.valueOf(diceRoll));
+//        setPrevButtonIcon();
+        move();
+        setPrevButtonIcon();
+        lblPositionPlayer.setText(String.valueOf(player.getPosition()));
+        lblScorePlayer.setText(String.valueOf(player.getScore()));
+        
+        if (player.getPosition() == 31) {
+            JOptionPane.showMessageDialog(this, "Congratulations, you have reached the finish line...");
+        }
+    }//GEN-LAST:event_btnRollActionPerformed
 
     /**
      * @param args the command line arguments
@@ -282,17 +324,17 @@ public class GameF extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnroll;
+    private javax.swing.JButton btnRoll;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel lblcurrentposition;
-    private javax.swing.JLabel lbllevel;
-    private javax.swing.JLabel lblscore;
-    private javax.swing.JLabel lblusername;
-    private javax.swing.JLabel lblzar;
+    private javax.swing.JLabel lblDice;
+    private javax.swing.JLabel lblLevel;
+    private javax.swing.JLabel lblLevelPlayer;
+    private javax.swing.JLabel lblPosition;
+    private javax.swing.JLabel lblPositionPlayer;
+    private javax.swing.JLabel lblScore;
+    private javax.swing.JLabel lblScorePlayer;
+    private javax.swing.JLabel lblUsername;
+    private javax.swing.JLabel lblUsernamePlayer;
     private javax.swing.JPanel panelInfos;
     private javax.swing.JPanel panelMap;
     // End of variables declaration//GEN-END:variables

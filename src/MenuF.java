@@ -5,7 +5,6 @@ import javax.swing.JOptionPane;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author emreyazici
@@ -151,16 +150,21 @@ public class MenuF extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        String username=JOptionPane.showInputDialog(null, "Enter your username");
-        
+        String username = JOptionPane.showInputDialog(null, "Enter your username");
+
         while (username == null || username.trim().length() == 0) {
             JOptionPane.showInputDialog(null, "Username is empty!!!");
-            username=JOptionPane.showInputDialog(null, "Enter your username");
+            username = JOptionPane.showInputDialog(null, "Enter your username");
         }
-        
+
         Player player = new Player(username);
         Manager manager = new Manager();
-        
+        if (player == null) {
+            JOptionPane.showMessageDialog(this, "PLAYER NULL!!");
+        }
+        if (manager == null) {
+            JOptionPane.showMessageDialog(this, "MANAGER NULL!!");
+        }
         new GameF(player, manager).setVisible(true);
         dispose();
     }//GEN-LAST:event_btnStartActionPerformed
@@ -196,8 +200,8 @@ public class MenuF extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuF().setVisible(true); 
-                
+                new MenuF().setVisible(true);
+
             }
         });
     }
