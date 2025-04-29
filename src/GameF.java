@@ -54,6 +54,9 @@ public class GameF extends javax.swing.JFrame {
             btnsMap[i].setHorizontalTextPosition(JButton.CENTER);
             btnsMap[i].setVerticalTextPosition(JButton.BOTTOM);
             btnsMap[i].setHorizontalAlignment(JButton.CENTER);
+            btnsMap[i].setBorderPainted(false);
+            btnsMap[i].setBorder(null);
+            btnsMap[i].setContentAreaFilled(false);
             panelMap.add(btnsMap[i]);
         }
         if (player.getLevel() == 1) {
