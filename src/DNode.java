@@ -8,5 +8,7 @@
  * @author emreyazici
  */
 public class DNode {
-    
+    private String spotType;
+    private int spotNum;
+    private SNode next;
 }

@@ -24,31 +24,32 @@ public class GameF extends javax.swing.JFrame {
     //player ve manager oluştur aşağıda constructer içinde bunları this ile eşitle
     private Player player;
     private Manager manager;
-    //private JPanel panelMap;
+    private int rollScore;
     private JButton[] btnsMap = new JButton[32];
     private ImageIcon iconTreasure;
     private ImageIcon iconTrap;
     private ImageIcon iconCharacter;
     private ImageIcon iconFinishFlag;
     private ImageIcon iconStartFlag;
+
     public GameF(Player player, Manager manager) {
         this.player = player;
         this.manager = manager;
         initComponents();
-        
+
         if (panelMap == null) {
             System.out.println("null");
-        
-    }
-        
+
+        }
+
         panelMap.setLayout(new GridLayout(4, 8, 12, 12));
-        
+
         this.iconTreasure = new ImageIcon(getClass().getResource("/images/treasureBtn.png"));
         this.iconTrap = new ImageIcon(getClass().getResource("/images/dang1.png"));
         this.iconCharacter = new ImageIcon(getClass().getResource("/images/miner.png"));
         this.iconFinishFlag = new ImageIcon(getClass().getResource("/images/finish.png"));
         this.iconStartFlag = new ImageIcon(getClass().getResource("/images/start.png"));
-        
+
         for (int i = 0; i < 32; i++) {
             btnsMap[i] = new JButton(String.valueOf(i));
             btnsMap[i].setHorizontalTextPosition(JButton.CENTER);
@@ -60,72 +61,77 @@ public class GameF extends javax.swing.JFrame {
             panelMap.add(btnsMap[i]);
         }
         if (player.getLevel() == 1) {
-            manager.createMapFirstLevel();
+            manager.createMapFirstLevel(player.getLevel());
         } else {
-            manager.createMapFirstLevel();
+            manager.createMapFirstLevel(player.getLevel());
         }
         setButonIcons();
-   
+
         lblUsernamePlayer.setText(player.getUsername());
-        lblLevelPlayer.setText(String.valueOf(player.getLevel()));
+        
         lblScorePlayer.setText(String.valueOf(player.getScore()));
     }
 
     private void setButonIcons() {//For the begining
         int i = 0;
         SNode temp = manager.getsListFirstLevel().getHeader();
-        while (temp!=null && i<32) {            
+        while (temp != null && i < 32) {
             if (temp.getSpotType().equals("Start")) {
                 btnsMap[i].setIcon(iconCharacter);
             } else if (temp.getSpotType().equals("Finish")) {
                 btnsMap[i].setIcon(iconFinishFlag);
             } else if (temp.getSpotType().equals("Treasure")) {
                 btnsMap[i].setIcon(iconTreasure);
-                btnsMap[i].setBackground(new Color(225,229,9)); 
-            }else if (temp.getSpotType().equals("Trap")) {
+                btnsMap[i].setBackground(new Color(225, 229, 9));
+            } else if (temp.getSpotType().equals("Trap")) {
                 btnsMap[i].setIcon(iconTrap);
                 btnsMap[i].setBackground(new Color(43, 36, 41));
-            }else
+            } else {
                 btnsMap[i].setBackground(new Color(240, 248, 255));
+            }
 
-            temp=temp.getNext();
+            temp = temp.getNext();
             i++;
         }
         btnsMap[31].setIcon(iconFinishFlag);
     }
-    private void setPrevButtonIcon(){
+
+    private void setPrevButtonIcon() {
         String prevPosition = getSpotType(player.getPrevPosition());
         if (prevPosition.equals("Start")) {
             btnsMap[player.getPrevPosition()].setIcon(iconStartFlag);
-        }else if (prevPosition.equals("Treasure")) {
+        } else if (prevPosition.equals("Treasure")) {
             btnsMap[player.getPrevPosition()].setIcon(iconTreasure);
-        }else if (prevPosition.equals("Trap")) {
+        } else if (prevPosition.equals("Trap")) {
             btnsMap[player.getPrevPosition()].setIcon(iconTrap);
-        }else if (prevPosition.equals("Empty")) {
+        } else if (prevPosition.equals("Empty")) {
             btnsMap[player.getPrevPosition()].setIcon(null);
         }
     }
-  
-    private String getSpotType(int position){
+
+    private String getSpotType(int position) {
         SNode temp = manager.getsListFirstLevel().getHeader();
-        while (position>0) {              
-            temp=temp.getNext();
+        while (position > 0) {
+            temp = temp.getNext();
             position--;
         }
         return temp.getSpotType();
     }
-    
-    private void move(){
-        String positionType=getSpotType(player.getPosition());
+
+    private void move() {
+        rollScore = 0;
+        String positionType = getSpotType(player.getPosition());
         btnsMap[player.getPosition()].setIcon(iconCharacter);
         if (positionType.equals("Trap")) {
-            player.setScore(player.getScore()-5);
-        }else if (positionType.equals("Treasure")) {
-            player.setScore(player.getScore()+10);
+            rollScore = -5;
+            player.setScore(player.getScore() - 5);
+        } else if (positionType.equals("Treasure")) {
+            rollScore = 10;
+            player.setScore(player.getScore() + 10);
         }
-        
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -148,6 +154,10 @@ public class GameF extends javax.swing.JFrame {
         lblPosition = new javax.swing.JLabel();
         lblPositionPlayer = new javax.swing.JLabel();
         lblDice = new javax.swing.JLabel();
+        lblGainedScore = new javax.swing.JLabel();
+        lblScoreGainedPlayer = new javax.swing.JLabel();
+        lblSpot = new javax.swing.JLabel();
+        lblSpotTypePlayer = new javax.swing.JLabel();
 
         jButton1.setText("jButton1");
 
@@ -179,64 +189,94 @@ public class GameF extends javax.swing.JFrame {
 
         lblPositionPlayer.setText("0");
 
+        lblGainedScore.setText("Score Gained:");
+
+        lblScoreGainedPlayer.setText("null");
+
+        lblSpot.setText("Spot Type:");
+
+        lblSpotTypePlayer.setText("Start");
+
         javax.swing.GroupLayout panelInfosLayout = new javax.swing.GroupLayout(panelInfos);
         panelInfos.setLayout(panelInfosLayout);
         panelInfosLayout.setHorizontalGroup(
             panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInfosLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
                 .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInfosLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
-                        .addComponent(lblPosition))
-                    .addComponent(btnRoll, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelInfosLayout.createSequentialGroup()
+                                .addComponent(lblPosition)
+                                .addGap(0, 7, Short.MAX_VALUE))
+                            .addComponent(lblGainedScore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblSpot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblSpotTypePlayer)
+                            .addComponent(lblPositionPlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblScoreGainedPlayer))
+                        .addGap(601, 601, 601))
+                    .addGroup(panelInfosLayout.createSequentialGroup()
+                        .addComponent(btnRoll, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblDice, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInfosLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblPositionPlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfosLayout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(lblDice, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 497, Short.MAX_VALUE)
-                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lblScore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 69, Short.MAX_VALUE)
-                    .addComponent(lblLevel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(27, 27, 27)
-                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblUsernamePlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblLevelPlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblScorePlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20))
+                        .addComponent(lblUsername)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblUsernamePlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(29, Short.MAX_VALUE))
+                    .addGroup(panelInfosLayout.createSequentialGroup()
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblScore)
+                            .addComponent(lblLevel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblScorePlayer, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+                            .addComponent(lblLevelPlayer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         panelInfosLayout.setVerticalGroup(
             panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInfosLayout.createSequentialGroup()
-                .addGap(117, 117, 117)
-                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblUsername)
-                    .addComponent(lblUsernamePlayer))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(23, 23, 23)
                 .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblScore)
-                    .addComponent(lblScorePlayer))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblLevelPlayer)
-                    .addComponent(lblLevel))
-                .addGap(0, 24, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInfosLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelInfosLayout.createSequentialGroup()
-                        .addComponent(btnRoll, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRoll, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelInfosLayout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(lblDice, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblPosition)
+                            .addComponent(lblPositionPlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblGainedScore)
+                            .addComponent(lblScoreGainedPlayer))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblSpot)
+                            .addComponent(lblSpotTypePlayer))
+                        .addContainerGap(16, Short.MAX_VALUE))
                     .addGroup(panelInfosLayout.createSequentialGroup()
-                        .addComponent(lblDice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(55, 55, 55)))
-                .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPosition)
-                    .addComponent(lblPositionPlayer, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblUsername)
+                            .addComponent(lblUsernamePlayer))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblScore)
+                            .addComponent(lblScorePlayer))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelInfosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblLevel)
+                            .addComponent(lblLevelPlayer))
+                        .addGap(37, 37, 37))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -253,7 +293,7 @@ public class GameF extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 567, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 546, Short.MAX_VALUE)
                 .addComponent(panelInfos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -263,26 +303,62 @@ public class GameF extends javax.swing.JFrame {
 
     private void btnRollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRollActionPerformed
         //player.setPrevSpot(getSpotType(player.getPosition())); //what is the prev spot
+        lblLevelPlayer.setText(String.valueOf(player.getLevel()));
         player.setPrevPosition(player.getPosition());
         Random random = new Random();
         int diceRoll = random.nextInt(6) + 1;
 
         int newPosition = player.getPosition() + diceRoll;
-        if (newPosition>31) {
-            newPosition=31;
+        if (newPosition > 31) {
+            newPosition = 31;
         }
 //        setPrevButtonIcon();
         player.setPosition(newPosition);
-        
+
         lblDice.setText(String.valueOf(diceRoll));
 //        setPrevButtonIcon();
         move();
+        lblScoreGainedPlayer.setText(String.valueOf(rollScore));
         setPrevButtonIcon();
         lblPositionPlayer.setText(String.valueOf(player.getPosition()));
+        if (player.getPosition() < 31) {
+            lblSpotTypePlayer.setText(getSpotType(player.getPosition()));
+        } else {
+            lblSpotTypePlayer.setText("Finish");
+        }
+
         lblScorePlayer.setText(String.valueOf(player.getScore()));
-        
+
         if (player.getPosition() == 31) {
-            JOptionPane.showMessageDialog(this, "Congratulations, you have reached the finish line...");
+//            JOptionPane.showMessageDialog(this, "Congratulations, you have reached the finish line...");
+            //if level 2 ise tebrik et menüye gönder gamef kapansın
+            int choice = JOptionPane.showOptionDialog(
+                    null,
+                    "You finished the game, do you want to continue?",
+                    "Decision",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new String[]{"CONTINUE", "STOP"},
+                    "CONTINUE"
+            );
+            
+            if (choice == 0) {
+                // CONTINUE'a bastıysa: Haritayı yenile (bunu sen halledeceksin)
+               // refreshMap(); // Örnek bir metod adı
+               player.setLevel(2);
+               player.setPosition(0);
+               player.setPrevPosition(0);
+               player.setPrevSpot("Start");
+               player.setScore(0);
+               
+               manager.createMapFirstLevel(player.getLevel());
+               
+            } else if (choice == 1) {
+                // STOP'a bastıysa: Menüye dön
+                new MenuF().setVisible(true); // MenuF senin ana menü frame'in
+                this.dispose(); // Mevcut pencereyi kapat
+            }
         }
     }//GEN-LAST:event_btnRollActionPerformed
 
@@ -330,12 +406,16 @@ public class GameF extends javax.swing.JFrame {
     private javax.swing.JButton btnRoll;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblDice;
+    private javax.swing.JLabel lblGainedScore;
     private javax.swing.JLabel lblLevel;
     private javax.swing.JLabel lblLevelPlayer;
     private javax.swing.JLabel lblPosition;
     private javax.swing.JLabel lblPositionPlayer;
     private javax.swing.JLabel lblScore;
+    private javax.swing.JLabel lblScoreGainedPlayer;
     private javax.swing.JLabel lblScorePlayer;
+    private javax.swing.JLabel lblSpot;
+    private javax.swing.JLabel lblSpotTypePlayer;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel lblUsernamePlayer;
     private javax.swing.JPanel panelInfos;

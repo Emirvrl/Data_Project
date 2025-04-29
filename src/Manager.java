@@ -19,14 +19,23 @@ public class Manager {
         return dListSecondLevel;
     }
     
-    public SLinkedList createMapFirstLevel(){
+    public SLinkedList createMapFirstLevel(int level){
         sListFirstLevel = new SLinkedList();
         sListFirstLevel.add("Start", 0);
-        for (int i = 1; i < 32; i++) { // first spot is start,last spot is finish point
+        if (level==1) {
+            for (int i = 1; i < 32; i++) { // first spot is start,last spot is finish point
             sListFirstLevel.add(getSpotTypeFirstLevel(), i);
+           }
+            System.out.println("Map is created for Level 1...");
+        }else{
+            for (int i = 1; i < 32; i++) { // first spot is start,last spot is finish point
+            sListFirstLevel.add(getSpotTypeSecondLevel(), i);
+            System.out.println("Map is created for Level 2...");
+           }
         }
+        
         sListFirstLevel.add("Finish", 32);
-        System.out.println("Map is created for Level 1...");
+        
         return sListFirstLevel;
     }
     
@@ -43,5 +52,31 @@ public class Manager {
         }
         
         return spots[randomIndex];
+    }
+    
+    private String getSpotTypeSecondLevel(){
+        String spots[]={"Treasure","Trap","Forward","Back","Empty"};
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(spots.length);
+        if (randomIndex==4) {
+            emptyCounter++;
+            if (emptyCounter>4) {
+                randomIndex = rand.nextInt(spots.length-1);
+                emptyCounter--;
+            }
+        }
+        
+        return spots[randomIndex];
+    }
+    
+    public SLinkedList createMapSecondLevel(){
+        dListSecondLevel = new DLinkedList();
+        sListFirstLevel.add("Start", 0);
+        for (int i = 1; i < 32; i++) { // first spot is start,last spot is finish point
+            sListFirstLevel.add(getSpotTypeSecondLevel(), i);
+        }
+        sListFirstLevel.add("Finish", 32);
+        System.out.println("Map is created for Level 2...");
+        return sListFirstLevel;
     }
 }
