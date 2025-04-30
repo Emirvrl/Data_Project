@@ -31,15 +31,16 @@ public class GameF extends javax.swing.JFrame {
     private ImageIcon iconCharacter;
     private ImageIcon iconFinishFlag;
     private ImageIcon iconStartFlag;
-
+    private ImageIcon iconForward;
+    private ImageIcon iconBack;
+    
     public GameF(Player player, Manager manager) {
         this.player = player;
         this.manager = manager;
         initComponents();
-
+        setResizable(false);
         if (panelMap == null) {
             System.out.println("null");
-
         }
 
         panelMap.setLayout(new GridLayout(4, 8, 12, 12));
@@ -49,6 +50,8 @@ public class GameF extends javax.swing.JFrame {
         this.iconCharacter = new ImageIcon(getClass().getResource("/images/miner.png"));
         this.iconFinishFlag = new ImageIcon(getClass().getResource("/images/finish.png"));
         this.iconStartFlag = new ImageIcon(getClass().getResource("/images/start.png"));
+        this.iconForward = new ImageIcon(getClass().getResource("/images/right-arrow.png"));
+        this.iconBack = new ImageIcon(getClass().getResource("/images/arrow.png"));
 
         for (int i = 0; i < 32; i++) {
             btnsMap[i] = new JButton(String.valueOf(i));
@@ -60,11 +63,8 @@ public class GameF extends javax.swing.JFrame {
             btnsMap[i].setContentAreaFilled(false);
             panelMap.add(btnsMap[i]);
         }
-        if (player.getLevel() == 1) {
-            manager.createMapFirstLevel(player.getLevel());
-        } else {
-            manager.createMapFirstLevel(player.getLevel());
-        }
+        
+        manager.createList(player.getLevel());
         setButonIcons();
 
         lblUsernamePlayer.setText(player.getUsername());
@@ -86,9 +86,16 @@ public class GameF extends javax.swing.JFrame {
             } else if (temp.getSpotType().equals("Trap")) {
                 btnsMap[i].setIcon(iconTrap);
                 btnsMap[i].setBackground(new Color(43, 36, 41));
+            } else if (temp.getSpotType().equals("Forward")) {
+                btnsMap[i].setIcon(iconForward);
+                System.out.println("point");
+            } else if (temp.getSpotType().equals("Back")) {
+                btnsMap[i].setIcon(iconBack);
+                System.out.println("point");
             } else {
                 btnsMap[i].setBackground(new Color(240, 248, 255));
             }
+            
 
             temp = temp.getNext();
             i++;
@@ -352,8 +359,10 @@ public class GameF extends javax.swing.JFrame {
                player.setPrevSpot("Start");
                player.setScore(0);
                
-               manager.createMapFirstLevel(player.getLevel());
-               
+               //manager.createList(player.getLevel());
+               GameF newMap = new  GameF(player, manager);
+               newMap.setVisible(true);
+               this.dispose();
             } else if (choice == 1) {
                 // STOP'a bastıysa: Menüye dön
                 new MenuF().setVisible(true); // MenuF senin ana menü frame'in

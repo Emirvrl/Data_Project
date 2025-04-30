@@ -19,23 +19,22 @@ public class Manager {
         return dListSecondLevel;
     }
     
-    public SLinkedList createMapFirstLevel(int level){
+    public SLinkedList createList(int level){
         sListFirstLevel = new SLinkedList();
         sListFirstLevel.add("Start", 0);
         if (level==1) {
             for (int i = 1; i < 32; i++) { // first spot is start,last spot is finish point
             sListFirstLevel.add(getSpotTypeFirstLevel(), i);
            }
-            System.out.println("Map is created for Level 1...");
+            System.out.println("List is created for Level 1...");
         }else{
             for (int i = 1; i < 32; i++) { // first spot is start,last spot is finish point
             sListFirstLevel.add(getSpotTypeSecondLevel(), i);
-            System.out.println("Map is created for Level 2...");
+                System.out.println(getSpotTypeSecondLevel());
            }
+            System.out.println("List is created for Level 2...");
         }
-        
         sListFirstLevel.add("Finish", 32);
-        
         return sListFirstLevel;
     }
     
@@ -69,14 +68,14 @@ public class Manager {
         return spots[randomIndex];
     }
     
-    public SLinkedList createMapSecondLevel(){
-        dListSecondLevel = new DLinkedList();
-        sListFirstLevel.add("Start", 0);
-        for (int i = 1; i < 32; i++) { // first spot is start,last spot is finish point
-            sListFirstLevel.add(getSpotTypeSecondLevel(), i);
-        }
-        sListFirstLevel.add("Finish", 32);
-        System.out.println("Map is created for Level 2...");
-        return sListFirstLevel;
-    }
+//    public SLinkedList createMapSecondLevel(){
+//        dListSecondLevel = new DLinkedList();
+//        sListFirstLevel.add("Start", 0);
+//        for (int i = 1; i < 32; i++) { // first spot is start,last spot is finish point
+//            sListFirstLevel.add(getSpotTypeSecondLevel(), i);
+//        }
+//        sListFirstLevel.add("Finish", 32);
+//        System.out.println("Map is created for Level 2...");
+//        return sListFirstLevel;
+//    }
 }

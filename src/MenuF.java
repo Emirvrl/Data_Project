@@ -16,6 +16,7 @@ public class MenuF extends javax.swing.JFrame {
      */
     public MenuF() {
         initComponents();
+        setResizable(false);
     }
 
     /**
