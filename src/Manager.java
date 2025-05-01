@@ -71,7 +71,7 @@ public class Manager {
         return spots[randomIndex];
     }
 
-    private String determineSpotType(int level) {
+    public String determineSpotType(int level) {
         String[] spots;
         int emptyIndex;
 
@@ -79,7 +79,7 @@ public class Manager {
             spots = new String[]{"Treasure", "Trap", "Empty"};
             emptyIndex = 0;
         } else {
-            spots = new String[]{"Treasure", "Trap", "Forward", "Back", "Empty"};
+            spots = new String[]{"Treasure", "Trap", "Forward", "Backward", "Empty"};
             emptyIndex = 4;
         }
 

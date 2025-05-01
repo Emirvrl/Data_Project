@@ -16,6 +16,7 @@ import javax.swing.JPanel;
  *
  * @author emreyazici
  */
+
 public class GameF extends javax.swing.JFrame {
 
     /**
@@ -24,6 +25,10 @@ public class GameF extends javax.swing.JFrame {
     //player ve manager oluştur aşağıda constructer içinde bunları this ile eşitle
     private Player player;
     private Manager manager;
+    private SLinkedList sLinkedList;
+    private DLinkedList dLinkedList;
+    private SNode temp;
+    private SNode header;
     private int rollScore;
     private JButton[] btnsMap = new JButton[32];
     private ImageIcon iconTreasure;
@@ -33,18 +38,59 @@ public class GameF extends javax.swing.JFrame {
     private ImageIcon iconStartFlag;
     private ImageIcon iconForward;
     private ImageIcon iconBack;
-    
+    int backForwardCounter = 0;
+
     public GameF(Player player, Manager manager) {
         this.player = player;
         this.manager = manager;
         initComponents();
+        lblLevelPlayer.setText(String.valueOf(player.getLevel()));//!!!!!
         setResizable(false);
         if (panelMap == null) {
             System.out.println("null");
         }
 
         panelMap.setLayout(new GridLayout(4, 8, 12, 12));
+        loadIcons();
+        createButtons();
+        if (player.getLevel() == 1) {
+            sLinkedList = (SLinkedList) manager.createLists(1);
+            temp = sLinkedList.getHeader();
+        } else {
+            dLinkedList = (DLinkedList) manager.createLists(2);
+            temp = dLinkedList.getHeader();
+        }
+        loadButonIcons();
+        lblUsernamePlayer.setText(player.getUsername());
+        lblScorePlayer.setText(String.valueOf(player.getScore()));
 
+//        this.iconTreasure = new ImageIcon(getClass().getResource("/images/treasureBtn.png"));
+//        this.iconTrap = new ImageIcon(getClass().getResource("/images/dang1.png"));
+//        this.iconCharacter = new ImageIcon(getClass().getResource("/images/miner.png"));
+//        this.iconFinishFlag = new ImageIcon(getClass().getResource("/images/finish.png"));
+//        this.iconStartFlag = new ImageIcon(getClass().getResource("/images/start.png"));
+//        this.iconForward = new ImageIcon(getClass().getResource("/images/right-arrow.png"));
+//        this.iconBack = new ImageIcon(getClass().getResource("/images/arrow.png"));
+//        for (int i = 0; i < 32; i++) {
+//            btnsMap[i] = new JButton(String.valueOf(i));
+//            btnsMap[i].setHorizontalTextPosition(JButton.CENTER);
+//            btnsMap[i].setVerticalTextPosition(JButton.BOTTOM);
+//            btnsMap[i].setHorizontalAlignment(JButton.CENTER);
+//            btnsMap[i].setBorderPainted(false);
+//            btnsMap[i].setBorder(null);
+//            btnsMap[i].setContentAreaFilled(false);
+//            panelMap.add(btnsMap[i]);
+//        }
+//        
+//        manager.createList(player.getLevel());
+//        setButonIcons();
+//
+//        lblUsernamePlayer.setText(player.getUsername());
+//        
+//        lblScorePlayer.setText(String.valueOf(player.getScore()));
+    }
+
+    private void loadIcons() {
         this.iconTreasure = new ImageIcon(getClass().getResource("/images/treasureBtn.png"));
         this.iconTrap = new ImageIcon(getClass().getResource("/images/dang1.png"));
         this.iconCharacter = new ImageIcon(getClass().getResource("/images/miner.png"));
@@ -52,7 +98,9 @@ public class GameF extends javax.swing.JFrame {
         this.iconStartFlag = new ImageIcon(getClass().getResource("/images/start.png"));
         this.iconForward = new ImageIcon(getClass().getResource("/images/right-arrow.png"));
         this.iconBack = new ImageIcon(getClass().getResource("/images/arrow.png"));
+    }
 
+    private void createButtons() {
         for (int i = 0; i < 32; i++) {
             btnsMap[i] = new JButton(String.valueOf(i));
             btnsMap[i].setHorizontalTextPosition(JButton.CENTER);
@@ -63,48 +111,114 @@ public class GameF extends javax.swing.JFrame {
             btnsMap[i].setContentAreaFilled(false);
             panelMap.add(btnsMap[i]);
         }
-        
-        manager.createList(player.getLevel());
-        setButonIcons();
-
-        lblUsernamePlayer.setText(player.getUsername());
-        
-        lblScorePlayer.setText(String.valueOf(player.getScore()));
     }
 
-    private void setButonIcons() {//For the begining
+    private void loadButonIcons() {
+        SNode node = (player.getLevel() == 1) ? sLinkedList.getHeader() : dLinkedList.getHeader();
         int i = 0;
-        SNode temp = manager.getsListFirstLevel().getHeader();
-        while (temp != null && i < 32) {
-            if (temp.getSpotType().equals("Start")) {
+
+        while (node != null && i < 32) {
+            if (node.getSpotType().equals("Start")) {
                 btnsMap[i].setIcon(iconCharacter);
-            } else if (temp.getSpotType().equals("Finish")) {
+            } else if (node.getSpotType().equals("Finish")) {
                 btnsMap[i].setIcon(iconFinishFlag);
-            } else if (temp.getSpotType().equals("Treasure")) {
+            } else if (node.getSpotType().equals("Treasure")) {
                 btnsMap[i].setIcon(iconTreasure);
                 btnsMap[i].setBackground(new Color(225, 229, 9));
-            } else if (temp.getSpotType().equals("Trap")) {
+            } else if (node.getSpotType().equals("Trap")) {
                 btnsMap[i].setIcon(iconTrap);
                 btnsMap[i].setBackground(new Color(43, 36, 41));
-            } else if (temp.getSpotType().equals("Forward")) {
+            } else if (node.getSpotType().equals("Forward")) {
                 btnsMap[i].setIcon(iconForward);
-                System.out.println("point");
-            } else if (temp.getSpotType().equals("Back")) {
+            } else if (node.getSpotType().equals("Backward")) {
                 btnsMap[i].setIcon(iconBack);
-                System.out.println("point");
             } else {
                 btnsMap[i].setBackground(new Color(240, 248, 255));
             }
-            
-
-            temp = temp.getNext();
+            node = node.getNext();
             i++;
         }
         btnsMap[31].setIcon(iconFinishFlag);
     }
 
+//    private void loadButonIcons() {//For the begining
+//        int i = 0;
+//        //SNode temp = manager.getsListFirstLevel().getHeader();
+//        header = temp;
+//        while (header != null && i < 32) {
+//            if (header.getSpotType().equals("Start")) {
+//                btnsMap[i].setIcon(iconCharacter);
+//            } else if (header.getSpotType().equals("Finish")) {
+//                btnsMap[i].setIcon(iconFinishFlag);
+//            } else if (header.getSpotType().equals("Treasure")) {
+//                btnsMap[i].setIcon(iconTreasure);
+//                btnsMap[i].setBackground(new Color(225, 229, 9));
+//            } else if (header.getSpotType().equals("Trap")) {
+//                btnsMap[i].setIcon(iconTrap);
+//                btnsMap[i].setBackground(new Color(43, 36, 41));
+//            } else if (header.getSpotType().equals("Forward")) {
+//                btnsMap[i].setIcon(iconForward);
+//                System.out.println("point");
+//            } else if (header.getSpotType().equals("Backward")) {
+//                btnsMap[i].setIcon(iconBack);
+//                System.out.println("point");
+//            } else {
+//                btnsMap[i].setBackground(new Color(240, 248, 255));
+//            }
+//            header = header.getNext();
+//            i++;
+//        }
+//        btnsMap[31].setIcon(iconFinishFlag);
+//    }
+//    private String findSpotType(int position) {
+//        //SNode temp = manager.getsListFirstLevel().getHeader();
+//        header = temp;
+//        while (position > 0) {
+//            header = header.getNext();
+//            position--;
+//        }
+//        return header.getSpotType();
+//    }
+    private String findSpotType(int position) {
+        SNode node = (player.getLevel() == 1) ? sLinkedList.getHeader() : dLinkedList.getHeader();
+        while (node != null && node.getSpotNum() != position) {
+            node = node.getNext();
+        }
+        return (node != null) ? node.getSpotType() : "Unknown";
+    }
+
+//        private void setButonIcons() {//For the begining
+//        int i = 0;
+//        SNode temp = manager.getsListFirstLevel().getHeader();
+//        while (temp != null && i < 32) {
+//            if (temp.getSpotType().equals("Start")) {
+//                btnsMap[i].setIcon(iconCharacter);
+//            } else if (temp.getSpotType().equals("Finish")) {
+//                btnsMap[i].setIcon(iconFinishFlag);
+//            } else if (temp.getSpotType().equals("Treasure")) {
+//                btnsMap[i].setIcon(iconTreasure);
+//                btnsMap[i].setBackground(new Color(225, 229, 9));
+//            } else if (temp.getSpotType().equals("Trap")) {
+//                btnsMap[i].setIcon(iconTrap);
+//                btnsMap[i].setBackground(new Color(43, 36, 41));
+//            } else if (temp.getSpotType().equals("Forward")) {
+//                btnsMap[i].setIcon(iconForward);
+//                System.out.println("point");
+//            } else if (temp.getSpotType().equals("Back")) {
+//                btnsMap[i].setIcon(iconBack);
+//                System.out.println("point");
+//            } else {
+//                btnsMap[i].setBackground(new Color(240, 248, 255));
+//            }
+//            
+//
+//            temp = temp.getNext();
+//            i++;
+//        }
+//        btnsMap[31].setIcon(iconFinishFlag);
+//    }
     private void setPrevButtonIcon() {
-        String prevPosition = getSpotType(player.getPrevPosition());
+        String prevPosition = findSpotType(player.getPrevPosition());
         if (prevPosition.equals("Start")) {
             btnsMap[player.getPrevPosition()].setIcon(iconStartFlag);
         } else if (prevPosition.equals("Treasure")) {
@@ -116,27 +230,151 @@ public class GameF extends javax.swing.JFrame {
         }
     }
 
-    private String getSpotType(int position) {
-        SNode temp = manager.getsListFirstLevel().getHeader();
-        while (position > 0) {
-            temp = temp.getNext();
-            position--;
+//    private String getSpotType(int position) {
+//        SNode temp = manager.getsListFirstLevel().getHeader();
+//        while (position > 0) {
+//            temp = temp.getNext();
+//            position--;
+//        }
+//        return temp.getSpotType();
+//    }
+//    private void move() {
+//        rollScore = 0;
+//        String positionType = findSpotType(player.getPosition());
+//        btnsMap[player.getPosition()].setIcon(iconCharacter);
+//        if (positionType.equals("Trap")) {
+//            rollScore = -5;
+//            player.setScore(player.getScore() - 5);
+//        } else if (positionType.equals("Treasure")) {
+//            rollScore = 10;
+//            player.setScore(player.getScore() + 10);
+//        }
+//
+//    }
+    private void updateButtonIcon(SNode node) {
+        int index = node.getSpotNum();
+        String type = node.getSpotType();
+
+        if (type.equals("Start")) {
+            btnsMap[index].setIcon(iconStartFlag);
+        } else if (type.equals("Finish")) {
+            btnsMap[index].setIcon(iconFinishFlag);
+        } else if (type.equals("Treasure")) {
+            btnsMap[index].setIcon(iconTreasure);
+        } else if (type.equals("Trap")) {
+            btnsMap[index].setIcon(iconTrap);
+        } else if (type.equals("Forward")) {
+            btnsMap[index].setIcon(iconForward);
+        } else if (type.equals("Back") || type.equals("Backward")) {
+            btnsMap[index].setIcon(iconBack);
+        } else {
+            btnsMap[index].setIcon(null);
         }
-        return temp.getSpotType();
     }
+    
+    private void clearForwardBackwardIcons() {
+    SNode node =  dLinkedList.getHeader();
 
-    private void move() {
-        rollScore = 0;
-        String positionType = getSpotType(player.getPosition());
-        btnsMap[player.getPosition()].setIcon(iconCharacter);
-        if (positionType.equals("Trap")) {
-            rollScore = -5;
-            player.setScore(player.getScore() - 5);
-        } else if (positionType.equals("Treasure")) {
-            rollScore = 10;
-            player.setScore(player.getScore() + 10);
+    while (node != null) {
+        String type = node.getSpotType();
+        int index = node.getSpotNum();
+
+        if (type.equals("Forward") || type.equals("Backward")) {
+            btnsMap[index].setIcon(null); 
+            node.setSpotType("Empty");
+            btnsMap[index].setBackground(new Color(240, 248, 255));
         }
 
+        node = node.getNext();
+    }
+}
+    
+    private void move(int dice) {
+        rollScore = 0;
+
+        SNode current = temp;
+        updateButtonIcon(current);
+
+        for (int i = 0; i < dice && current.getNext() != null; i++) {
+            current = current.getNext();
+        }
+
+        boolean isBackOrForward = true;
+        
+        while (isBackOrForward && backForwardCounter <5) {
+            System.out.println(backForwardCounter);
+            int randForward = new Random().nextInt(4) + 1;//1-2-3-4
+            int randBackward = new Random().nextInt(2) + 1;//1-2
+            
+            isBackOrForward = false;
+
+            String type = current.getSpotType();
+
+            if (type.equals("Treasure")) {
+                player.setScore(player.getScore() + 10);
+                rollScore = 10;
+            } else if (type.equals("Trap")) {
+                player.setScore(player.getScore() - 5);
+                rollScore = -5;
+            } else if (type.equals("Forward")) {
+                backForwardCounter++;
+                System.out.println("-------" + current.getSpotNum());
+                JOptionPane.showMessageDialog(this, "Forward Spot: " + randForward + " step forward.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                for (int i = 0; i < randForward && current.getNext() != null; i++) {
+                    current = current.getNext();
+                }
+                isBackOrForward = true;
+            } else if (type.equals("Backward")) {
+                backForwardCounter++;
+                System.out.println("-------" + current.getSpotNum());
+                JOptionPane.showMessageDialog(this, "Backward Spot: " + randBackward + " step back.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                for (int i = 0; i < randBackward && current.getPrev() != null; i++) {
+                    current = current.getPrev();
+                }
+                
+                isBackOrForward = true;
+            }
+        }
+        if (backForwardCounter==5) {
+            clearForwardBackwardIcons();
+        }
+
+        temp = current;
+        btnsMap[temp.getSpotNum()].setIcon(iconCharacter);
+        lblScorePlayer.setText(String.valueOf(player.getScore()));
+
+        if (current.getSpotType().equals("Finish") && player.getLevel() == 1) {
+            int result = JOptionPane.showOptionDialog(this,
+                    "Level 1 is finished! Do you want to continiue?",
+                    "FINISH",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new String[]{"Continue", "Stop"},
+                    "Continue");
+
+            if (result == JOptionPane.NO_OPTION) {
+                new MenuF().setVisible(true);
+                this.dispose();
+            } else {
+                //level 1 i dosyaya yaz
+                player.setLevel(2);
+                player.setScore(0);
+                new GameF(player, manager).setVisible(true);
+                this.dispose();
+            }
+        } else if (current.getSpotType().equals("Finish") && player.getLevel() == 2) {
+            JOptionPane.showInputDialog(this, "Congratulations...You finished the game!!!");
+            new MenuF().setVisible(true);
+            this.dispose();
+        }
+        player.setPosition(temp.getSpotNum());
+        System.out.println(temp.getSpotType());
+        if (player.getPosition() < 31) {
+            lblSpotTypePlayer.setText(temp.getSpotType());
+        } else {
+            lblSpotTypePlayer.setText("Finish");
+        }
     }
 
     /**
@@ -309,66 +547,85 @@ public class GameF extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRollActionPerformed
-        //player.setPrevSpot(getSpotType(player.getPosition())); //what is the prev spot
         lblLevelPlayer.setText(String.valueOf(player.getLevel()));
         player.setPrevPosition(player.getPosition());
+
         Random random = new Random();
         int diceRoll = random.nextInt(6) + 1;
-
-        int newPosition = player.getPosition() + diceRoll;
-        if (newPosition > 31) {
-            newPosition = 31;
-        }
-//        setPrevButtonIcon();
-        player.setPosition(newPosition);
-
         lblDice.setText(String.valueOf(diceRoll));
-//        setPrevButtonIcon();
-        move();
+
+        move(diceRoll);
+        player.setPosition(temp.getSpotNum());
+
         lblScoreGainedPlayer.setText(String.valueOf(rollScore));
-        setPrevButtonIcon();
         lblPositionPlayer.setText(String.valueOf(player.getPosition()));
-        if (player.getPosition() < 31) {
-            lblSpotTypePlayer.setText(getSpotType(player.getPosition()));
-        } else {
-            lblSpotTypePlayer.setText("Finish");
-        }
 
+//        if (player.getPosition() < 31) {
+//            lblSpotTypePlayer.setText(findSpotType(player.getPosition()));
+//        } else {
+//            lblSpotTypePlayer.setText("Finish");
+//        }
         lblScorePlayer.setText(String.valueOf(player.getScore()));
-
-        if (player.getPosition() == 31) {
-//            JOptionPane.showMessageDialog(this, "Congratulations, you have reached the finish line...");
-            //if level 2 ise tebrik et menüye gönder gamef kapansın
-            int choice = JOptionPane.showOptionDialog(
-                    null,
-                    "You finished the game, do you want to continue?",
-                    "Decision",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    new String[]{"CONTINUE", "STOP"},
-                    "CONTINUE"
-            );
-            
-            if (choice == 0) {
-                // CONTINUE'a bastıysa: Haritayı yenile (bunu sen halledeceksin)
-               // refreshMap(); // Örnek bir metod adı
-               player.setLevel(2);
-               player.setPosition(0);
-               player.setPrevPosition(0);
-               player.setPrevSpot("Start");
-               player.setScore(0);
-               
-               //manager.createList(player.getLevel());
-               GameF newMap = new  GameF(player, manager);
-               newMap.setVisible(true);
-               this.dispose();
-            } else if (choice == 1) {
-                // STOP'a bastıysa: Menüye dön
-                new MenuF().setVisible(true); // MenuF senin ana menü frame'in
-                this.dispose(); // Mevcut pencereyi kapat
-            }
-        }
+//        //player.setPrevSpot(getSpotType(player.getPosition())); //what is the prev spot
+//        lblLevelPlayer.setText(String.valueOf(player.getLevel()));
+//        player.setPrevPosition(player.getPosition());
+//        Random random = new Random();
+//        int diceRoll = random.nextInt(6) + 1;
+//        
+//        int newPosition = player.getPosition() + diceRoll;
+//        if (newPosition > 31) {
+//            newPosition = 31;
+//        }
+////        setPrevButtonIcon();
+//        player.setPosition(newPosition);
+//        
+//        lblDice.setText(String.valueOf(diceRoll));
+////        setPrevButtonIcon();
+//        move(diceRoll);
+//        lblScoreGainedPlayer.setText(String.valueOf(rollScore));
+//        //setPrevButtonIcon();
+//        lblPositionPlayer.setText(String.valueOf(player.getPosition()));
+//        if (player.getPosition() < 31) {
+//            lblSpotTypePlayer.setText(findSpotType(player.getPosition()));
+//        } else {
+//            lblSpotTypePlayer.setText("Finish");
+//        }
+//        
+//        lblScorePlayer.setText(String.valueOf(player.getScore()));
+//        
+////        if (player.getPosition() == 31) {
+//////            JOptionPane.showMessageDialog(this, "Congratulations, you have reached the finish line...");
+////            //if level 2 ise tebrik et menüye gönder gamef kapansın
+////            int choice = JOptionPane.showOptionDialog(
+////                    null,
+////                    "You finished the game, do you want to continue?",
+////                    "Decision",
+////                    JOptionPane.YES_NO_OPTION,
+////                    JOptionPane.QUESTION_MESSAGE,
+////                    null,
+////                    new String[]{"CONTINUE", "STOP"},
+////                    "CONTINUE"
+////            );
+////            
+////            if (choice == 0) {
+////                // CONTINUE'a bastıysa: Haritayı yenile (bunu sen halledeceksin)
+////                // refreshMap(); // Örnek bir metod adı
+////                player.setLevel(2);
+////                player.setPosition(0);
+////                player.setPrevPosition(0);
+////                player.setPrevSpot("Start");
+////                player.setScore(0);
+////
+////                //manager.createList(player.getLevel());
+////                GameF newMap = new GameF(player, manager);
+////                newMap.setVisible(true);
+////                this.dispose();
+////            } else if (choice == 1) {
+////                // STOP'a bastıysa: Menüye dön
+////                new MenuF().setVisible(true); // MenuF senin ana menü frame'in
+////                this.dispose(); // Mevcut pencereyi kapat
+////            }
+////        }
     }//GEN-LAST:event_btnRollActionPerformed
 
     /**
