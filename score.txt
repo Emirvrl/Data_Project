@@ -2,3 +2,9 @@ emir,level1,40
 emir,level2,-5
 emir,level1,-25
 emir,level2,0
+emre,level1,-10
+emre,level2,45
+emre,level1,-15
+emre,level2,-5
+emre,level1,10
+emre,level2,5
