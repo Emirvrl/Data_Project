@@ -8,8 +8,9 @@
  * @author emreyazici
  */
 public class BinarySearchTree {
+
     BSTNode root;
-    
+
     public void insert(int score, String username, String level) {
         BSTNode newNode = new BSTNode(score, username, level);
 
@@ -37,7 +38,7 @@ public class BinarySearchTree {
             }
         }
     }
-    
+
     public String inorder() {
         String result = inorder(root);
         if (result.endsWith(", ")) {
@@ -56,17 +57,33 @@ public class BinarySearchTree {
         return left + current + right;
     }
     
-//    private void inorder(BSTNode node){
-//        if (node!=null) {
-//            inorder(node.left);
-//            System.out.println(node.score+" ");
-//            inorder(node.right);
-//        }
-//    }
-//    
-//    void inorder(){
-//        System.out.println("Inorder: ");
-//        inorder(root);
-//        System.out.println();
-//    }
+    String min(){
+        String min;
+        if (root==null) {
+            return "The user didn't play a game!!!";
+        }
+        
+        BSTNode temp = root;
+        while (temp.left!=null) {            
+            temp=temp.left;
+        }
+        
+        min=String.valueOf(temp.score)+" ("+temp.level+")";
+        return min;
+    }
+    
+    String max(){
+        String max;
+        if (root==null) {
+            return "The user didn't play a game!!!";
+        }
+        
+        BSTNode temp = root;
+        while (temp.right!=null) {            
+            temp=temp.right;
+        }
+        
+        max=String.valueOf(temp.score)+" ("+temp.level+")";
+        return max;
+    }
 }

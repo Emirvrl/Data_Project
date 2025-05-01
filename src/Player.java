@@ -8,7 +8,7 @@
  * @author emreyazici
  */
 public class Player {
-    private String username,prevSpot;
+    private String username;
     private int position,level,score,prevPosition;
 
     public Player(String username) {
@@ -16,7 +16,6 @@ public class Player {
         this.level=1;
         this.score=0;
         this.position=0;// Position zero is starting point
-        this.prevSpot="Start";
         this.prevPosition=0;
     }
 
@@ -26,14 +25,6 @@ public class Player {
 
     public void setPrevPosition(int prevPosition) {
         this.prevPosition = prevPosition;
-    }
-
-    public String getPrevSpot() {
-        return prevSpot;
-    }
-
-    public void setPrevSpot(String prevSpot) {
-        this.prevSpot = prevSpot;
     }
 
     public String getUsername() {

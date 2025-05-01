@@ -1,6 +1,8 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +74,34 @@ public class ScoreboardF extends JPanel {
         add(formPanel);
         formPanel.setBounds(0, 125, 800, 400);
 
+        // Menu Butonu
+        JButton btnMenu = new JButton("Menu");
+        btnMenu.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnMenu.setBounds(500, 340, 100, 30); // Sağ alt köşe
+        btnMenu.setFocusPainted(true);
+        btnMenu.setContentAreaFilled(true);   // Buton arka planı şeffaf
+        btnMenu.setBorderPainted(true);       // Kenarlık kaldırıldı
+        btnMenu.setForeground(Color.BLACK);    // Yazı rengi
+        this.add(btnMenu);
+// İstersen bir ActionListener ekleyebilirsin:
+//        btnMenu.addActionListener(e -> {
+//            JOptionPane.showMessageDialog(this, "Ana menüye dönülüyor...");
+//            new MenuF().setVisible(true);
+//                SwingUtilities.getWindowAncestor(this).dispose();
+//            // örn: ana pencereye geçiş yapılabilir
+//        });
+        btnMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(ScoreboardF.this, "Ana menüye dönülüyor...");
+                new MenuF().setVisible(true);
+                SwingUtilities.getWindowAncestor(ScoreboardF.this).dispose();
+            }
+        });
+
+//        formPanel.add(btnMenu);
         // Kullanıcı adı al
-        String usernameFilter = JOptionPane.showInputDialog(this, "Skorlarına bakmak istediğiniz kullanıcı adı:");
+        String usernameFilter = JOptionPane.showInputDialog(this, "Username:");
         try (BufferedReader br = new BufferedReader(new FileReader("score.txt"))) {
             String line;
 
@@ -94,37 +122,10 @@ public class ScoreboardF extends JPanel {
         }
 
         allScores = bst.inorder();
-        // .txt dosyasını oku ve kullanıcının skorlarını al
-//        List<String> userScores = new ArrayList<>();
-//        try (BufferedReader br = new BufferedReader(new FileReader("score.txt"))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                if (line.startsWith(username + ",")) {
-//                    userScores.add(line);
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Best, Worst ve All Score hesapla
-//        int best = Integer.MIN_VALUE;
-//        int worst = Integer.MAX_VALUE;
-//        StringBuilder allScores = new StringBuilder();
-//
-//        for (String s : userScores) {
-//            String[] parts = s.split(",");
-//            String level = parts[1];
-//            int score = Integer.parseInt(parts[2]);
-//            allScores.append(score).append(" (").append(level).append("), ");
-//            best = Math.max(best, score);
-//            worst = Math.min(worst, score);
-//        }
 
-        // Label'lara yazdır
         lblUser.setText("Username: " + usernameFilter);
-//        lblBest.setText("Best Score: " + best);
-//        lblWorst.setText("Worst Score: " + worst);
+        lblBest.setText("Best Score: " + bst.max());
+        lblWorst.setText("Worst Score: " + bst.min());
         txtAllScores.setText("All Scores: " + allScores);
     }
 
@@ -134,4 +135,5 @@ public class ScoreboardF extends JPanel {
         // Arka plan görselini çiz
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
+
 }

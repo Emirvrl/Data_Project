@@ -8,3 +8,9 @@ emre,level1,-15
 emre,level2,-5
 emre,level1,10
 emre,level2,5
+emre,level1,5
+emir,level1,-10
+emre,level1,20
+emre,level1,45
+emre,level2,55
+emre,level1,45

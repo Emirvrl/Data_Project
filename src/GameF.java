@@ -66,31 +66,6 @@ public class GameF extends javax.swing.JFrame {
         loadButonIcons();
         lblUsernamePlayer.setText(player.getUsername());
         lblScorePlayer.setText(String.valueOf(player.getScore()));
-
-//        this.iconTreasure = new ImageIcon(getClass().getResource("/images/treasureBtn.png"));
-//        this.iconTrap = new ImageIcon(getClass().getResource("/images/dang1.png"));
-//        this.iconCharacter = new ImageIcon(getClass().getResource("/images/miner.png"));
-//        this.iconFinishFlag = new ImageIcon(getClass().getResource("/images/finish.png"));
-//        this.iconStartFlag = new ImageIcon(getClass().getResource("/images/start.png"));
-//        this.iconForward = new ImageIcon(getClass().getResource("/images/right-arrow.png"));
-//        this.iconBack = new ImageIcon(getClass().getResource("/images/arrow.png"));
-//        for (int i = 0; i < 32; i++) {
-//            btnsMap[i] = new JButton(String.valueOf(i));
-//            btnsMap[i].setHorizontalTextPosition(JButton.CENTER);
-//            btnsMap[i].setVerticalTextPosition(JButton.BOTTOM);
-//            btnsMap[i].setHorizontalAlignment(JButton.CENTER);
-//            btnsMap[i].setBorderPainted(false);
-//            btnsMap[i].setBorder(null);
-//            btnsMap[i].setContentAreaFilled(false);
-//            panelMap.add(btnsMap[i]);
-//        }
-//        
-//        manager.createList(player.getLevel());
-//        setButonIcons();
-//
-//        lblUsernamePlayer.setText(player.getUsername());
-//        
-//        lblScorePlayer.setText(String.valueOf(player.getScore()));
     }
 
     private void loadIcons() {
@@ -144,44 +119,6 @@ public class GameF extends javax.swing.JFrame {
         btnsMap[31].setIcon(iconFinishFlag);
     }
 
-//    private void loadButonIcons() {//For the begining
-//        int i = 0;
-//        //SNode temp = manager.getsListFirstLevel().getHeader();
-//        header = temp;
-//        while (header != null && i < 32) {
-//            if (header.getSpotType().equals("Start")) {
-//                btnsMap[i].setIcon(iconCharacter);
-//            } else if (header.getSpotType().equals("Finish")) {
-//                btnsMap[i].setIcon(iconFinishFlag);
-//            } else if (header.getSpotType().equals("Treasure")) {
-//                btnsMap[i].setIcon(iconTreasure);
-//                btnsMap[i].setBackground(new Color(225, 229, 9));
-//            } else if (header.getSpotType().equals("Trap")) {
-//                btnsMap[i].setIcon(iconTrap);
-//                btnsMap[i].setBackground(new Color(43, 36, 41));
-//            } else if (header.getSpotType().equals("Forward")) {
-//                btnsMap[i].setIcon(iconForward);
-//                System.out.println("point");
-//            } else if (header.getSpotType().equals("Backward")) {
-//                btnsMap[i].setIcon(iconBack);
-//                System.out.println("point");
-//            } else {
-//                btnsMap[i].setBackground(new Color(240, 248, 255));
-//            }
-//            header = header.getNext();
-//            i++;
-//        }
-//        btnsMap[31].setIcon(iconFinishFlag);
-//    }
-//    private String findSpotType(int position) {
-//        //SNode temp = manager.getsListFirstLevel().getHeader();
-//        header = temp;
-//        while (position > 0) {
-//            header = header.getNext();
-//            position--;
-//        }
-//        return header.getSpotType();
-//    }
     private String findSpotType(int position) {
         SNode node = (player.getLevel() == 1) ? sLinkedList.getHeader() : dLinkedList.getHeader();
         while (node != null && node.getSpotNum() != position) {
@@ -190,36 +127,6 @@ public class GameF extends javax.swing.JFrame {
         return (node != null) ? node.getSpotType() : "Unknown";
     }
 
-//        private void setButonIcons() {//For the begining
-//        int i = 0;
-//        SNode temp = manager.getsListFirstLevel().getHeader();
-//        while (temp != null && i < 32) {
-//            if (temp.getSpotType().equals("Start")) {
-//                btnsMap[i].setIcon(iconCharacter);
-//            } else if (temp.getSpotType().equals("Finish")) {
-//                btnsMap[i].setIcon(iconFinishFlag);
-//            } else if (temp.getSpotType().equals("Treasure")) {
-//                btnsMap[i].setIcon(iconTreasure);
-//                btnsMap[i].setBackground(new Color(225, 229, 9));
-//            } else if (temp.getSpotType().equals("Trap")) {
-//                btnsMap[i].setIcon(iconTrap);
-//                btnsMap[i].setBackground(new Color(43, 36, 41));
-//            } else if (temp.getSpotType().equals("Forward")) {
-//                btnsMap[i].setIcon(iconForward);
-//                System.out.println("point");
-//            } else if (temp.getSpotType().equals("Back")) {
-//                btnsMap[i].setIcon(iconBack);
-//                System.out.println("point");
-//            } else {
-//                btnsMap[i].setBackground(new Color(240, 248, 255));
-//            }
-//            
-//
-//            temp = temp.getNext();
-//            i++;
-//        }
-//        btnsMap[31].setIcon(iconFinishFlag);
-//    }
     private void setPrevButtonIcon() {
         String prevPosition = findSpotType(player.getPrevPosition());
         if (prevPosition.equals("Start")) {
@@ -233,27 +140,6 @@ public class GameF extends javax.swing.JFrame {
         }
     }
 
-//    private String getSpotType(int position) {
-//        SNode temp = manager.getsListFirstLevel().getHeader();
-//        while (position > 0) {
-//            temp = temp.getNext();
-//            position--;
-//        }
-//        return temp.getSpotType();
-//    }
-//    private void move() {
-//        rollScore = 0;
-//        String positionType = findSpotType(player.getPosition());
-//        btnsMap[player.getPosition()].setIcon(iconCharacter);
-//        if (positionType.equals("Trap")) {
-//            rollScore = -5;
-//            player.setScore(player.getScore() - 5);
-//        } else if (positionType.equals("Treasure")) {
-//            rollScore = 10;
-//            player.setScore(player.getScore() + 10);
-//        }
-//
-//    }
     private void updateButtonIcon(SNode node) {
         int index = node.getSpotNum();
         String type = node.getSpotType();
@@ -566,73 +452,7 @@ public class GameF extends javax.swing.JFrame {
 
         lblScoreGainedPlayer.setText(String.valueOf(rollScore));
         lblPositionPlayer.setText(String.valueOf(player.getPosition()));
-
-//        if (player.getPosition() < 31) {
-//            lblSpotTypePlayer.setText(findSpotType(player.getPosition()));
-//        } else {
-//            lblSpotTypePlayer.setText("Finish");
-//        }
         lblScorePlayer.setText(String.valueOf(player.getScore()));
-//        //player.setPrevSpot(getSpotType(player.getPosition())); //what is the prev spot
-//        lblLevelPlayer.setText(String.valueOf(player.getLevel()));
-//        player.setPrevPosition(player.getPosition());
-//        Random random = new Random();
-//        int diceRoll = random.nextInt(6) + 1;
-//        
-//        int newPosition = player.getPosition() + diceRoll;
-//        if (newPosition > 31) {
-//            newPosition = 31;
-//        }
-////        setPrevButtonIcon();
-//        player.setPosition(newPosition);
-//        
-//        lblDice.setText(String.valueOf(diceRoll));
-////        setPrevButtonIcon();
-//        move(diceRoll);
-//        lblScoreGainedPlayer.setText(String.valueOf(rollScore));
-//        //setPrevButtonIcon();
-//        lblPositionPlayer.setText(String.valueOf(player.getPosition()));
-//        if (player.getPosition() < 31) {
-//            lblSpotTypePlayer.setText(findSpotType(player.getPosition()));
-//        } else {
-//            lblSpotTypePlayer.setText("Finish");
-//        }
-//        
-//        lblScorePlayer.setText(String.valueOf(player.getScore()));
-//        
-////        if (player.getPosition() == 31) {
-//////            JOptionPane.showMessageDialog(this, "Congratulations, you have reached the finish line...");
-////            //if level 2 ise tebrik et menüye gönder gamef kapansın
-////            int choice = JOptionPane.showOptionDialog(
-////                    null,
-////                    "You finished the game, do you want to continue?",
-////                    "Decision",
-////                    JOptionPane.YES_NO_OPTION,
-////                    JOptionPane.QUESTION_MESSAGE,
-////                    null,
-////                    new String[]{"CONTINUE", "STOP"},
-////                    "CONTINUE"
-////            );
-////            
-////            if (choice == 0) {
-////                // CONTINUE'a bastıysa: Haritayı yenile (bunu sen halledeceksin)
-////                // refreshMap(); // Örnek bir metod adı
-////                player.setLevel(2);
-////                player.setPosition(0);
-////                player.setPrevPosition(0);
-////                player.setPrevSpot("Start");
-////                player.setScore(0);
-////
-////                //manager.createList(player.getLevel());
-////                GameF newMap = new GameF(player, manager);
-////                newMap.setVisible(true);
-////                this.dispose();
-////            } else if (choice == 1) {
-////                // STOP'a bastıysa: Menüye dön
-////                new MenuF().setVisible(true); // MenuF senin ana menü frame'in
-////                this.dispose(); // Mevcut pencereyi kapat
-////            }
-////        }
     }//GEN-LAST:event_btnRollActionPerformed
 
     /**
