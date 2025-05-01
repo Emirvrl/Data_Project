@@ -25,6 +25,7 @@ public class GameF extends javax.swing.JFrame {
     //player ve manager oluştur aşağıda constructer içinde bunları this ile eşitle
     private Player player;
     private Manager manager;
+    private Scores scores;
     private SLinkedList sLinkedList;
     private DLinkedList dLinkedList;
     private SNode temp;
@@ -43,6 +44,8 @@ public class GameF extends javax.swing.JFrame {
     public GameF(Player player, Manager manager) {
         this.player = player;
         this.manager = manager;
+        this.scores=scores = new Scores(player);
+        
         initComponents();
         lblLevelPlayer.setText(String.valueOf(player.getLevel()));//!!!!!
         setResizable(false);
@@ -354,10 +357,11 @@ public class GameF extends javax.swing.JFrame {
                     "Continue");
 
             if (result == JOptionPane.NO_OPTION) {
+                scores.writeScore();
                 new MenuF().setVisible(true);
                 this.dispose();
             } else {
-                //level 1 i dosyaya yaz
+                scores.writeScore();//level 1 i dosyaya yaz
                 player.setLevel(2);
                 player.setScore(0);
                 new GameF(player, manager).setVisible(true);
@@ -365,6 +369,8 @@ public class GameF extends javax.swing.JFrame {
             }
         } else if (current.getSpotType().equals("Finish") && player.getLevel() == 2) {
             JOptionPane.showInputDialog(this, "Congratulations...You finished the game!!!");
+            
+            scores.writeScore();
             new MenuF().setVisible(true);
             this.dispose();
         }
@@ -376,6 +382,7 @@ public class GameF extends javax.swing.JFrame {
             lblSpotTypePlayer.setText("Finish");
         }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
