@@ -11,13 +11,23 @@ public class SNode {
     private String spotType;
     private int spotNum;
     private SNode next;
+    private SNode prev;
 
     public SNode(String spotType, int spotNum) {
         this.spotType = spotType;
         this.spotNum = spotNum;
         this.next=null;
+        this.prev=null;
     }
 
+    public SNode getPrev() {
+        return prev;
+    }
+
+    public void setPrev(SNode prev) {
+        this.prev = prev;
+    }
+    
     public String getSpotType() {
         return spotType;
     }

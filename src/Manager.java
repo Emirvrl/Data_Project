@@ -3,14 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 import java.util.Random;
+
 /**
  *
  * @author emreyazici
  */
 public class Manager {
+
     private SLinkedList sListFirstLevel;
     private DLinkedList dListSecondLevel;
     private int emptyCounter = 0;
+
     public SLinkedList getsListFirstLevel() {
         return sListFirstLevel;
     }
@@ -18,56 +21,107 @@ public class Manager {
     public DLinkedList getdListSecondLevel() {
         return dListSecondLevel;
     }
-    
-    public SLinkedList createList(int level){
+
+    public SLinkedList createList(int level) {
         sListFirstLevel = new SLinkedList();
         sListFirstLevel.add("Start", 0);
-        if (level==1) {
+        if (level == 1) {
             for (int i = 1; i < 32; i++) { // first spot is start,last spot is finish point
-            sListFirstLevel.add(getSpotTypeFirstLevel(), i);
-           }
+                sListFirstLevel.add(getSpotTypeFirstLevel(), i);
+            }
             System.out.println("List is created for Level 1...");
-        }else{
+        } else {
             for (int i = 1; i < 32; i++) { // first spot is start,last spot is finish point
-            sListFirstLevel.add(getSpotTypeSecondLevel(), i);
+                sListFirstLevel.add(getSpotTypeSecondLevel(), i);
                 System.out.println(getSpotTypeSecondLevel());
-           }
+            }
             System.out.println("List is created for Level 2...");
         }
         sListFirstLevel.add("Finish", 32);
         return sListFirstLevel;
     }
-    
-    private String getSpotTypeFirstLevel(){
-        String spots[]={"Treasure","Trap","Empty"};
+
+    private String getSpotTypeFirstLevel() {
+        String spots[] = {"Treasure", "Trap", "Empty"};
         Random rand = new Random();
         int randomIndex = rand.nextInt(spots.length);
-        if (randomIndex==2) {
+        if (randomIndex == 2) {
             emptyCounter++;
-            if (emptyCounter>4) {
-                randomIndex = rand.nextInt(spots.length-1);
+            if (emptyCounter > 4) {
+                randomIndex = rand.nextInt(spots.length - 1);
                 emptyCounter--;
             }
         }
-        
+
         return spots[randomIndex];
     }
-    
-    private String getSpotTypeSecondLevel(){
-        String spots[]={"Treasure","Trap","Forward","Back","Empty"};
+
+    private String getSpotTypeSecondLevel() {
+        String spots[] = {"Treasure", "Trap", "Forward", "Back", "Empty"};
         Random rand = new Random();
         int randomIndex = rand.nextInt(spots.length);
-        if (randomIndex==4) {
+        if (randomIndex == 4) {
             emptyCounter++;
-            if (emptyCounter>4) {
-                randomIndex = rand.nextInt(spots.length-1);
+            if (emptyCounter > 4) {
+                randomIndex = rand.nextInt(spots.length - 1);
                 emptyCounter--;
             }
         }
-        
+
         return spots[randomIndex];
     }
-    
+
+    private String determineSpotType(int level) {
+        String[] spots;
+        int emptyIndex;
+
+        if (level == 1) {
+            spots = new String[]{"Treasure", "Trap", "Empty"};
+            emptyIndex = 0;
+        } else {
+            spots = new String[]{"Treasure", "Trap", "Forward", "Back", "Empty"};
+            emptyIndex = 4;
+        }
+
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(spots.length);
+
+        if (randomIndex == emptyIndex) {
+            emptyCounter++;
+            if (emptyCounter > 4) {
+                randomIndex = rand.nextInt(spots.length - 1);
+                emptyCounter--;
+            }
+        }
+
+        return spots[randomIndex];
+
+    }
+
+    public Object createLists(int level) {
+        if (level == 1) {
+            sListFirstLevel = new SLinkedList();
+            sListFirstLevel.add("Start", 0);
+            
+            for (int i = 1; i < 31; i++) { // first spot is start,last spot is finish point
+                sListFirstLevel.add(determineSpotType(level), i);
+            }
+            sListFirstLevel.add("Finish", 31);
+            System.out.println("List is created for Level 1...");
+            return sListFirstLevel;
+        } else {
+            dListSecondLevel = new DLinkedList();
+            dListSecondLevel.add("Start", 0);
+            
+            for (int i = 1; i < 31; i++) { // first spot is start,last spot is finish point
+                dListSecondLevel.add(determineSpotType(level), i);
+            }
+            dListSecondLevel.add("Finish", 31);
+            System.out.println("List is created for Level 2...");
+            return dListSecondLevel;
+        }
+    }
+
 //    public SLinkedList createMapSecondLevel(){
 //        dListSecondLevel = new DLinkedList();
 //        sListFirstLevel.add("Start", 0);
