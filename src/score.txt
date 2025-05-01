@@ -1,9 +1,0 @@
-emre,level1,-15
-eömre,level1,5
-eömre,level2,-5
-emre,level1,-5
-emre,level2,25
-emre,level1,-10
-emre,level2,5
-eöre,level1,-10
-eöre,level2,10

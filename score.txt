@@ -1,0 +1,4 @@
+emir,level1,40
+emir,level2,-5
+emir,level1,-25
+emir,level2,0

@@ -1,14 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author EmirV
- */
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScoreboardF extends JPanel {
 
@@ -38,33 +32,68 @@ public class ScoreboardF extends JPanel {
         formPanel.setLayout(null); // Layout yöneticisi yok, konumları manuel ayarlayacağız
         formPanel.setOpaque(false); // Arka planı saydam yap (isteğe bağlı)
 
-// Label 1
+        // Label 1
         JLabel lblUser = new JLabel("Username: ");
         lblUser.setBounds(100, 40, 300, 30); // x=100, y=50, genişlik=300, yükseklik=30
         formPanel.add(lblUser);
         lblUser.setFont(new Font("Segoe UI", Font.BOLD, 15));
 
-// Label 2
+        // Label 2
         JLabel lblBest = new JLabel("Best Score: ");
         lblBest.setBounds(100, 80, 300, 30);
         formPanel.add(lblBest);
         lblBest.setFont(new Font("Segoe UI", Font.BOLD, 15));
 
-// Label 3
+        // Label 3
         JLabel lblWorst = new JLabel("Worst Score: ");
         lblWorst.setBounds(100, 120, 300, 30);
         formPanel.add(lblWorst);
         lblWorst.setFont(new Font("Segoe UI", Font.BOLD, 15));
 
-// Label 4
+        // Label 4
         JLabel lblAll = new JLabel("All Scores:");
         lblAll.setBounds(100, 160, 400, 30);
         formPanel.add(lblAll);
         lblAll.setFont(new Font("Segoe UI", Font.BOLD, 15));
 
-        
         add(formPanel);
         formPanel.setBounds(0, 125, 800, 400); // formPanel’in konumunu ve boyutunu ayarlıyoruz
+
+        // Kullanıcı adı al
+        String username = JOptionPane.showInputDialog(this, "Skorlarına bakmak istediğiniz kullanıcı adı:");
+
+        // .txt dosyasını oku ve kullanıcının skorlarını al
+        List<String> userScores = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("score.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith(username + ",")) {
+                    userScores.add(line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Best, Worst ve All Score hesapla
+        int best = Integer.MIN_VALUE;
+        int worst = Integer.MAX_VALUE;
+        StringBuilder allScores = new StringBuilder();
+
+        for (String s : userScores) {
+            String[] parts = s.split(",");
+            String level = parts[1];
+            int score = Integer.parseInt(parts[2]);
+            allScores.append(score).append(" (").append(level).append("), ");
+            best = Math.max(best, score);
+            worst = Math.min(worst, score);
+        }
+
+        // Label'lara yazdır
+        lblUser.setText("Username: " + username);
+        lblBest.setText("Best Score: " + best);
+        lblWorst.setText("Worst Score: " + worst);
+        lblAll.setText("All Scores: " + allScores.toString());
     }
 
     @Override
