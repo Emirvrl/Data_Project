@@ -368,8 +368,8 @@ public class GameF extends javax.swing.JFrame {
                 this.dispose();
             }
         } else if (current.getSpotType().equals("Finish") && player.getLevel() == 2) {
-            JOptionPane.showInputDialog(this, "Congratulations...You finished the game!!!");
-            
+            JOptionPane.showMessageDialog(this, "Congratulations...You finished the game!!!");
+            //Congratulations...You finished the game!!!            
             scores.writeScore();
             new MenuF().setVisible(true);
             this.dispose();
