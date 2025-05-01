@@ -1,4 +1,5 @@
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /*
@@ -70,6 +71,11 @@ public class MenuF extends javax.swing.JFrame {
         btnScores.setBackground(new java.awt.Color(218, 165, 32));
         btnScores.setForeground(new java.awt.Color(92, 64, 51));
         btnScores.setText("Scoreboard");
+        btnScores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnScoresActionPerformed(evt);
+            }
+        });
 
         jLabelTreasure.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/treasure_1355876.png"))); // NOI18N
 
@@ -83,10 +89,6 @@ public class MenuF extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(77, Short.MAX_VALUE)
-                .addComponent(jLabelWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(71, 71, 71))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(115, 115, 115)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -108,6 +110,10 @@ public class MenuF extends javax.swing.JFrame {
                             .addComponent(btnStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnScores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(77, Short.MAX_VALUE)
+                .addComponent(jLabelWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(71, 71, 71))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +126,7 @@ public class MenuF extends javax.swing.JFrame {
                         .addComponent(jLabelStart)
                         .addGap(37, 37, 37))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -169,6 +175,20 @@ public class MenuF extends javax.swing.JFrame {
         new GameF(player, manager).setVisible(true);
         dispose();
     }//GEN-LAST:event_btnStartActionPerformed
+
+    private void btnScoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScoresActionPerformed
+        JFrame scoreboardFrame = new JFrame("Scoreboard");
+        scoreboardFrame.setSize(728, 900);
+        scoreboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        scoreboardFrame.setLocationRelativeTo(null);
+        scoreboardFrame.setResizable(false);
+        
+
+        scoreboardFrame.setContentPane(new ScoreboardF()); // Yeni paneli ekle
+        scoreboardFrame.setVisible(true);
+
+        this.dispose();
+    }//GEN-LAST:event_btnScoresActionPerformed
 
     /**
      * @param args the command line arguments
