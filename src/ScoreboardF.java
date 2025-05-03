@@ -74,30 +74,30 @@ public class ScoreboardF extends JPanel {
         add(formPanel);
         formPanel.setBounds(0, 125, 800, 400);
 
-        // Menu Butonu
-        JButton btnMenu = new JButton("Menu");
-        btnMenu.setFont(new Font("Segoe UI", Font.BOLD, 15));
-        btnMenu.setBounds(500, 340, 100, 30); // Sağ alt köşe
-        btnMenu.setFocusPainted(true);
-        btnMenu.setContentAreaFilled(true);   // Buton arka planı şeffaf
-        btnMenu.setBorderPainted(true);       // Kenarlık kaldırıldı
-        btnMenu.setForeground(Color.BLACK);    // Yazı rengi
-        this.add(btnMenu);
-// İstersen bir ActionListener ekleyebilirsin:
-//        btnMenu.addActionListener(e -> {
-//            JOptionPane.showMessageDialog(this, "Ana menüye dönülüyor...");
-//            new MenuF().setVisible(true);
-//                SwingUtilities.getWindowAncestor(this).dispose();
-//            // örn: ana pencereye geçiş yapılabilir
-//        });
-        btnMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(ScoreboardF.this, "Ana menüye dönülüyor...");
-                new MenuF().setVisible(true);
-                SwingUtilities.getWindowAncestor(ScoreboardF.this).dispose();
-            }
-        });
+ JButton btnMenu = new JButton("Menu");
+btnMenu.setFont(new Font("Segoe UI", Font.BOLD, 15));
+btnMenu.setBounds(600, 720, 100, 40); // Daha büyük boyut ve uygun konum
+btnMenu.setForeground(Color.BLACK);
+
+btnMenu.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Mesaj kutusunu göster
+        JOptionPane.showMessageDialog(ScoreboardF.this, "Returning to Menu...");
+        
+        // İçinde bulunduğun pencereyi bul (örneğin bu sınıf bir JPanel ise)
+        Window window = SwingUtilities.getWindowAncestor(btnMenu);
+        if (window instanceof JFrame) {
+            window.dispose(); // Pencereyi kapat
+        }
+
+        // Yeni MenuF penceresini başlat
+        MenuF menuFrame = new MenuF(); // MenuF, JFrame olmalı
+        menuFrame.setVisible(true);
+    }
+});
+
+this.add(btnMenu); // JPanel veya container içindeysen this'e eklenir
 
 //        formPanel.add(btnMenu);
         // Kullanıcı adı al

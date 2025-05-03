@@ -14,3 +14,11 @@ emre,level1,20
 emre,level1,45
 emre,level2,55
 emre,level1,45
+Emir,level1,0
+Emir,level2,-5
+Emir,level1,20
+Emir,level2,0
+Bahri,level1,25
+Bahri,level2,10
+Bahri,level1,0
+Bahri,level2,35
